@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escola Napoleão</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Fundo animado - DIA */
+body.light {
+    background: linear-gradient(135deg, #87CEEB 0%, #98D8E8 50%, #E0F6FF 100%);
+}
+
+body.light::before {
+    content: '';
+    position: fixed;
+    top: 100px;
+    right: 150px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #FFD700 40%, #FFA500 70%, transparent 75%);
+    border-radius: 50%;
+    box-shadow: 0 0 40px #FFD700;
+    z-index: -1;
+    animation: solBrilho 3s ease-in-out infinite alternate;
+}
+
+@keyframes solBrilho {
+    0% { box-shadow: 0 0 40px #FFD700; }
+    100% { box-shadow: 0 0 60px #FFEB3B; }
+}
+
+body.light::after {
+    content: '';
+    position: fixed;
+    top: 80px;
+    left: 200px;
+    width: 60px;
+    height: 30px;
+    background: #fff;
+    border-radius: 50px;
+    opacity: 0.8;
+    z-index: -1;
+    animation: nuvemFlutua 6s ease-in-out infinite;
+}
+
+body.light .nuvem2 {
+    content: '';
+    position: fixed;
+    top: 150px;
+    right: 250px;
+    width: 80px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50px;
+    opacity: 0.7;
+    z-index: -1;
+    animation: nuvemFlutua 8s ease-in-out infinite reverse;
+}
+
+@keyframes nuvemFlutua {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Fundo animado - NOITE */
+body.dark {
+    background: radial-gradient(ellipse at bottom, #0C0C1D 0%, #1A1A2E 50%, #16213E 100%);
+}
+
+body.dark::before {
+    content: '';
+    position: fixed;
+    top: 120px;
+    left: 180px;
+    width: 70px;
+    height: 70px;
+    background: radial-gradient(circle, #F0F8FF 20%, #B0C4DE 50%, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 20px #F0F8FF;
+    z-index: -1;
+    animation: luaBrilho 4s ease-in-out infinite alternate;
+}
+
+@keyframes luaBrilho {
+    0% { box-shadow: 0 0 20px #F0F8FF; }
+    100% { box-shadow: 0 0 30px #E6E6FA; }
+}
+
+body.dark .estrela {
+    position: fixed;
+    background: #fff;
+    border-radius: 50%;
+    animation: piscar 2s ease-in-out infinite alternate;
+    z-index: -1;
+}
+
+.estrela:nth-child(1) { top: 20%; left: 10%; width: 3px; height: 3px; animation-delay: 0s; }
+.estrela:nth-child(2) { top: 10%; right: 15%; width: 2px; height: 2px; animation-delay: 0.5s; }
+.estrela:nth-child(3) { top: 30%; left: 80%; width: 4px; height: 4px; animation-delay: 1s; }
+.estrela:nth-child(4) { bottom: 20%; right: 20%; width: 2px; height: 2px; animation-delay: 1.5s; }
+.estrela:nth-child(5) { top: 60%; left: 5%; width: 3px; height: 3px; animation-delay: 0.8s; }
+
+@keyframes piscar {
+    0% { opacity: 0.3; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.3); }
+}
+
+.container {
+    display: flex;
+    width: 1100px;
+    max-width: 95%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 10;
+}
+
+body.dark .container {
+    background: rgba(20, 20, 40, 0.95);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.content-side {
+    flex: 1.3;
+    padding: 40px;
+    overflow-y: auto;
+    transition: all 0.4s ease;
+}
+
+body.dark .content-side {
+    color: #e0e0e0;
+}
+
+/* Topo */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.top-bar h1 {
+    color: #005bea;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+body.dark .top-bar h1 {
+    color: #4DA8FF;
+}
+
+/* Botão Tema */
+.theme-toggle {
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #005bea, #00c6fb);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(0, 91, 234, 0.4);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(0, 91, 234, 0.6);
+}
+
+.theme-toggle:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+.theme-toggle i {
+    transition: transform 0.4s ease;
+}
+
+/* Cards */
+.card {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+}
+
+body.dark .card {
+    background: rgba(30, 30, 60, 0.8);
+    border-color: rgba(100,100,150,0.3);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.card h2 {
+    color: #005bea;
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+body.dark .card h2 {
+    color: #4DA8FF;
+}
+
+.card p, .card li {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+body.dark .card p, body.dark .card li {
+    color: #d0d0d0;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    color: #005bea;
+    text-decoration: none;
+}
+
+body.dark a {
+    color: #4DA8FF;
+}
+
+/* FAQ avançado */
+.faq-item {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 15px 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+body.dark .faq-item {
+    border-bottom-color: rgba(255,255,255,0.1);
+}
+
+.faq-question {
+    font-weight: 600;
+    color: #005bea;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body.dark .faq-question {
+    color: #4DA8FF;
+}
+
+.faq-icon {
+    transition: transform 0.3s ease;
+    font-size: 20px;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.4s ease;
+    font-size: 14px;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 12px;
+}
+
+.faq-item.hidden {
+    display: none;
+}
+
+/* Botão de curiosidade melhorado */
+.curiosidade-btn {
+    margin-top: 15px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #005bea, #00c6fb);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 91, 234, 0.3);
+}
+
+.curiosidade-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 91, 234, 0.4);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        margin: 20px;
+    }
+
+    .content-side {
+        padding: 25px 20px;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .theme-toggle {
+        width: 55px;
+        height: 55px;
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body class="light">
+    <!-- Estrelas (só visíveis no modo dark) -->
+    <div class="estrela"></div>
+    <div class="estrela"></div>
+    <div class="estrela"></div>
+    <div class="estrela"></div>
+    <div class="estrela"></div>
+
+<div class="container">
+    <div class="content-side">
+
+        <div class="top-bar">
+            <h1>🌟 Escola Napoleão</h1>
+            <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+                <i id="themeIcon">☀️</i>
+            </button>
+        </div>
+
+        <div class="card">
+            <h2>🔗 Links Úteis</h2>
+            <ul>
+                <li><a href="https://saladofuturo.educacao.sp.gov.br/boletim">Boletim Online</a></li>
+                <li><a href="secretaria.html">Secretaria</a></li>
+                <li><a href="cursos.html">Cursos</a></li>
+                <li><a href="https://www.instagram.com/escolanapoleao/">Instagram</a></li>
+                <li><a href="https://www.facebook.com/napoleaodecarvalhofreire">Facebook</a></li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📖 Historia da escola</h2>
+            <p>A Escola Napoleão de Carvalho Freire, localizada em Moema, São Paulo, foi criada em 1988 e tem um histórico significativo. A escola foi oficialmente nomeada com o nome do professor Napoleão de Carvalho Freire, um importante educador e líder social. Desde sua fundação, a escola tem se dedicado a oferecer um ensino de qualidade e a promover a inclusão e a diversidade entre os alunos. A escola tem um forte compromisso com a formação de profissionais e a promoção de valores como respeito, educação e alegria.</p>
+        </div>
+
+        <div class="card">
+            <h2>📍 Endereço</h2>
+            <p>
+                Rua Irauna, 815<br>
+                Indianópolis<br>
+                São Paulo - SP
+            </p>
+        </div>
+
+        <!-- CURIOSIDADES -->
+        <div class="card">
+            <h2>🧠 Curiosidades</h2>
+            <p id="curiosidade">
+                Clique no botão para descobrir uma curiosidade!
+            </p>
+            <button class="curiosidade-btn" onclick="novaCuriosidade()">
+                🔄 Nova curiosidade
+            </button>
+        </div>
+
+        <!-- FAQ -->
+        <div class="card">
+            <h2>❓ FAQ (Perguntas Frequentes)</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Qual o horário da escola?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    A escola funciona nos períodos da manhã e tarde.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Como acessar o boletim?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    Use o link "Boletim Online" na página.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Onde fica a escola?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    Rua Irauna, 815 - Indianópolis, São Paulo.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Qual o telefone?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    (11) 5561-1492
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const curiosidades = [
+/* 🌍 GERAIS */
+"O Japão é um arquipélago, ou seja, um país formado por várias ilhas. Durante muito tempo, dizia-se que ele tinha cerca de 6.852 ilhas, mas um levantamento mais recente feito pela Autoridade de Informação Geoespacial do Japão em 2023 identificou mais de 14.000 ilhas, mais que o dobro do que se acreditava antes.",
+"A Lua se afasta da Terra cerca de 3,8 cm por ano devido às forças de maré. A gravidade da Lua puxa os oceanos, formando marés que ficam ligeiramente adiantadas por causa da rotação da Terra. Esse desalinhamento transfere energia para a Lua, empurrando-a para uma órbita mais distante. Como consequência, a rotação da Terra desacelera lentamente, fazendo com que os dias fiquem um pouco mais longos ao longo do tempo.",
+"Os polvo possuem três corações: dois bombeiam sangue para as brânquias, enquanto o terceiro envia para o resto do corpo. Esse sistema é importante porque o sangue deles, rico em hemocianina, transporta oxigênio de forma menos eficiente que o dos humanos, exigindo um bombeamento mais complexo.",
+"A Antártida é considerada o maior deserto do mundo porque recebe pouquíssima precipitação ao longo do ano. Mesmo sendo coberta de gelo, sua umidade é extremamente baixa, o que a caracteriza como um deserto polar.",
+"O Sol concentra cerca de 99,8% de toda a massa do Sistema Solar. Isso significa que todos os planetas, luas, asteroides e cometas juntos representam apenas uma pequena fração da massa total, evidenciando a enorme influência gravitacional do Sol sobre todo o sistema.",
+"Um raio pode atingir temperaturas de até 30.000 °C, sendo mais quente que a superfície do Sol. Esse calor extremo ocorre em frações de segundo durante a descarga elétrica na atmosfera.",
+"Os golfinho utilizam assobios únicos para se identificar, funcionando como 'nomes próprios'. Cada indivíduo reconhece o som específico dos outros, facilitando a comunicação no grupo.",
+"As banana são levemente radioativas porque contêm potássio, incluindo o isótopo potássio-40. A quantidade é muito pequena e totalmente inofensiva para o consumo humano.",
+"A Terra não é uma esfera perfeita; ela tem formato de geoide, sendo levemente achatada nos polos e mais larga na região do equador devido à rotação.",
+"O Universo está em expansão desde o Big Bang. Isso significa que as galáxias estão se afastando umas das outras, fenômeno observado por meio do desvio para o vermelho da luz emitida por elas.",
+
+/* 🎮 JOGOS (20) */
+"O Tennis for Two é frequentemente considerado um dos primeiros videogames, criado em 1958 e exibido em um osciloscópio, antes mesmo dos consoles domésticos existirem.",
+"O personagem Mario, da Nintendo, já foi retratado como carpinteiro em seus primeiros jogos, antes de se tornar o famoso encanador.",
+"O Sonic foi criado pela Sega justamente para competir com Mario e se tornar o mascote rival da Nintendo nos anos 90.",
+"O Minecraft é o jogo mais vendido da história, com centenas de milhões de cópias, destacando-se pela liberdade de criação e exploração.",
+"O clássico Tetris foi criado na União Soviética por Alexey Pajitnov, tornando-se um dos jogos mais influentes de todos os tempos.",
+"O PlayStation quase surgiu como uma parceria entre a Sony e a Nintendo, mas o acordo foi cancelado, levando a Sony a criar seu próprio console.",
+"O Pac-Man foi inspirado em uma pizza com uma fatia faltando, o que deu origem ao formato icônico do personagem.",
+"O Fortnite ficou famoso por realizar eventos ao vivo dentro do jogo, incluindo shows de artistas como Travis Scott.",
+"O Grand Theft Auto V(GTA 5) é um dos jogos mais lucrativos já feitos, gerando bilhões de dólares desde seu lançamento.",
+"A franquia The Legend of Zelda ajudou a popularizar jogos de aventura com exploração, puzzles e narrativa mais envolvente.",
+"O primeiro controle do Xbox ficou conhecido como 'The Duke' por seu tamanho grande e design robusto.",
+"A franquia Pokémon é uma das maiores do mundo, envolvendo jogos, séries, filmes e produtos diversos.",
+"O Doom ficou famoso por sua versatilidade e já foi adaptado para rodar em diversos dispositivos incomuns.",
+"O Among Us se tornou um fenômeno global anos após seu lançamento, impulsionado por streamers e redes sociais.",
+"O Magnavox Odyssey foi o primeiro console doméstico da história, lançado em 1972.",
+"O League of Legends possui milhões de jogadores ativos ao redor do mundo, sendo um dos jogos mais populares.",
+"Estudos mostram que jogos eletrônicos podem melhorar reflexos e tempo de reação, dependendo do tipo de jogo e da forma como são utilizados.",
+"O speedrun é a prática de terminar jogos no menor tempo possível, muitas vezes explorando técnicas avançadas.",
+"Alguns jogos são utilizados em treinamento militar para simular situações reais e melhorar a tomada de decisões.",
+"Os eSports já são considerados uma forma de esporte competitivo, com campeonatos, equipes profissionais e milhões de espectadores ao redor do mundo.",
+"Easter eggs são segredos escondidos dentro dos jogos, colocados pelos desenvolvedores para jogadores curiosos descobrirem. Eles podem ser referências, mensagens ou coisas ocultas que não são necessárias para zerar o jogo, como acontece em Minecraft.",
+"Jumpscares são sustos rápidos usados principalmente em jogos de terror. Eles aparecem de repente, geralmente com um som alto, para assustar o jogador, como acontece em Five Nights at Freddy's.",
+
+/* 💻 TECNOLOGIA (20) */
+"A Internet surgiu em 1969 com a ARPANET, um projeto militar dos EUA que conectava computadores para troca de informações.",
+"O primeiro computador eletrônico, como o ENIAC, ocupava uma sala inteira e consumia enorme quantidade de energia.",
+"O Google processa bilhões de buscas por dia, sendo uma das principais ferramentas de acesso à informação no mundo.",
+"O primeiro celular portátil, o Motorola DynaTAC 8000X, pesava mais de 1 kg e tinha bateria limitada.",
+"O Wi-Fi permite conexão à internet sem o uso de fios, utilizando ondas de rádio.",
+"Hoje existem mais celulares do que pessoas no mundo, mostrando a enorme popularização dessa tecnologia.",
+"O primeiro site da história, criado por Tim Berners-Lee, ainda está online como registro histórico.",
+"A inteligência artificial aprende com dados, identificando padrões para tomar decisões ou fazer previsões.",
+"Grande parte da internet depende de cabos submarinos que atravessam oceanos, conectando continentes.",
+"O E-mail foi criado antes da web e continua sendo uma das formas de comunicação digital mais usadas.",
+"O teclado QWERTY foi desenvolvido para evitar travamentos em máquinas de escrever antigas.",
+"O primeiro mouse era feito de madeira e tinha um design bem diferente dos atuais.",
+"A chamada computação em nuvem consiste em armazenar dados e executar serviços em servidores acessados pela internet.",
+"O código binário utiliza apenas 0 e 1 para representar informações nos computadores.",
+"Os computadores funcionam com eletricidade, processando dados por meio de circuitos eletrônicos.",
+"Existem vírus de computador, programas criados para causar danos ou roubar informações.",
+"O Bluetooth permite conexão sem fio entre dispositivos próximos.",
+"Os satélites são essenciais para sistemas de GPS, ajudando na localização e navegação.",
+"O armazenamento de dados evoluiu de tecnologias como disquetes para soluções modernas em nuvem.",
+"A tecnologia avança cada vez mais rápido, impulsionando mudanças constantes na forma como vivemos, trabalhamos e nos comunicamos.",
+
+/* 📚 ESCOLA (20) */
+"O cérebro humano aprende melhor com pausas, pois o descanso ajuda a consolidar as informações estudadas.",
+"Escrever à mão ativa mais áreas do memória, o que contribui para memorizar melhor o conteúdo.",
+"Estudar à noite pode ajudar na revisão, já que o cérebro humano processa informações durante o sono.",
+"Dormir bem melhora o aprendizado, pois o sono é essencial para fixar o que foi estudado.",
+"Fazer resumos facilita o estudo ao organizar as ideias e destacar os pontos principais do conteúdo.",
+"Ensinar alguém ajuda a aprender mais, pois reforça o entendimento e revela possíveis dúvidas.",
+"A leitura frequente melhora o vocabulário e amplia o conhecimento geral.",
+"Anotar à mão pode ser mais eficaz do que digitar, pois exige maior atenção e processamento mental.",
+"Revisar conteúdos regularmente evita o esquecimento e fortalece a memória.",
+"O foco é essencial para estudar de forma eficiente e absorver melhor as informações.",
+"Ambientes silenciosos ajudam na concentração, reduzindo distrações externas.",
+"A organização dos estudos melhora o desempenho e facilita o aprendizado.",
+"Definir metas ajuda a manter a motivação e o progresso nos estudos.",
+"Estudar um pouco todos os dias é mais eficiente do que estudar tudo de uma vez.",
+"A prática constante leva à melhora contínua no aprendizado.",
+"Os erros fazem parte do processo de aprendizagem e ajudam a evoluir.",
+"Fazer perguntas ajuda a entender melhor os conteúdos estudados.",
+"A curiosidade estimula o interesse e torna o aprendizado mais eficaz.",
+"A disciplina é fundamental para manter uma rotina de estudos consistente.",
+"Aprender pode ser divertido quando se encontra métodos que despertam interesse e motivação."
+];
+
+function novaCuriosidade() {
+    const random = Math.floor(Math.random() * curiosidades.length);
+    document.getElementById("curiosidade").innerText = curiosidades[random];
+}
+
+// FAQ functionality
+const faqItems = document.querySelectorAll(".faq-item");
+
+faqItems.forEach(item => {
+    item.addEventListener("click", () => {
+        faqItems.forEach(i => {
+            if (i !== item) i.classList.remove("active");
+        });
+        item.classList.toggle("active");
+    });
+});
+
+// Theme Toggle
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const body = document.body;
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    
+    if (body.classList.contains('dark')) {
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+    }
+});
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme') || 'light';
+if (savedTheme === 'dark') {
+    body.classList.add('dark');
+    themeIcon.textContent = '🌙';
+}
+</script>
+
+</body>
+</html>
